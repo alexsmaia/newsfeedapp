@@ -6,6 +6,24 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
+
+    <!-- Section and Author Sub Titles Main -->
+    <style name="SubTitlesMain">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textAppearance">?android:textAppearanceSmall</item>
+    </style>
+    <!-- Section and Author Sub Titles Left  -->
+    <style name="SubTitlesLeft" parent="SubTitlesMain">
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:paddingRight">8dp</item>
+    </style>
+    <!-- Section and Author Sub Titles Right  -->
+    <style name="SubTitlesRight" parent="SubTitlesMain">
+        <item name="android:textColor">@android:color/black</item>
     </style>
 
 </resources>
