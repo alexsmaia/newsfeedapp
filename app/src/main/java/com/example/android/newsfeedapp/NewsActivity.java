@@ -5,12 +5,16 @@ import android.app.LoaderManager.LoaderCallbacks;
 import android.content.Context;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -28,8 +32,8 @@ public class NewsActivity extends AppCompatActivity implements LoaderCallbacks<L
     private static final String LOG_TAG = NewsActivity.class.getName();
 
     /** URL for News data from the The Guardin dataset */
-    private static final String USGS_REQUEST_URL =
-            "https://content.guardianapis.com/search?format=json&section=world&show-fields=all&page-size=10&order-by=newest&api-key=" + BuildConfig.THE_GUARDIAN_API_KEY;
+    private static final String API_REQUEST_URL =
+            "https://content.guardianapis.com/search";
 
     /**
      * Constant value for the News loader ID.
@@ -108,8 +112,38 @@ public class NewsActivity extends AppCompatActivity implements LoaderCallbacks<L
 
         Log.e(LOG_TAG, " Create Loader ");
 
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+        // Get News Section Preference
+        String newsSection = sharedPrefs.getString(
+                getString(R.string.settings_news_section_key),
+                getString(R.string.settings_news_section_default));
+
+        // Get Order By Preference
+        String orderBy = sharedPrefs.getString(
+                getString(R.string.settings_order_by_key),
+                getString(R.string.settings_order_by_default)
+        );
+
+        // Get News Number Display Preference
+        String newsNumber = sharedPrefs.getString(
+                getString(R.string.settings_news_number_display_key),
+                getString(R.string.settings_news_number_display_default));
+
+        // parse breaks apart the URI string that's passed into its parameter
+        Uri baseUri = Uri.parse(API_REQUEST_URL);
+        Uri.Builder uriBuilder = baseUri.buildUpon();
+
+        // Append query parameter and its value. For example, the `format=geojson`
+        uriBuilder.appendQueryParameter("format", "json");
+        uriBuilder.appendQueryParameter("section", newsSection);
+        uriBuilder.appendQueryParameter("show-fields", "all");
+        uriBuilder.appendQueryParameter("page-size", newsNumber);
+        uriBuilder.appendQueryParameter("order-by", orderBy);
+        uriBuilder.appendQueryParameter("api-key", BuildConfig.THE_GUARDIAN_API_KEY);
+
         // Create a new loader for the given URL
-        return new NewsLoader(this, USGS_REQUEST_URL);
+        return new NewsLoader(this, uriBuilder.toString());
     }
 
     @Override
@@ -140,6 +174,23 @@ public class NewsActivity extends AppCompatActivity implements LoaderCallbacks<L
 
         // Loader reset, so we can clear out our existing data.
         mAdapter.clear();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            Intent settingsIntent = new Intent(this, SettingsActivity.class);
+            startActivity(settingsIntent);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 

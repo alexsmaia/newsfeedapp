@@ -2,7 +2,7 @@
     <!-- Text to display the App Name -->
     <string name="app_name">News Feed app</string>
     <!-- Text to display when there are no News -->
-    <string name="no_news">No earthquakes found.</string>
+    <string name="no_news">No News found.</string>
     <!-- Error message when there is no internet connectivity -->
     <string name="no_internet_connection">No internet connection.</string>
     <!-- List Strings -->
