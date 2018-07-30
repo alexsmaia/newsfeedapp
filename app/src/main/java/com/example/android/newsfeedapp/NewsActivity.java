@@ -29,7 +29,7 @@ public class NewsActivity extends AppCompatActivity implements LoaderCallbacks<L
 
     /** URL for News data from the The Guardin dataset */
     private static final String USGS_REQUEST_URL =
-            "https://content.guardianapis.com/search?format=json&section=world&show-fields=all&page-size=10&order-by=newest&api-key=9c8542cd-e108-4c11-99c2-b7f4400c15f1";
+            "https://content.guardianapis.com/search?format=json&section=world&show-fields=all&page-size=10&order-by=newest&api-key=" + BuildConfig.THE_GUARDIAN_API_KEY;
 
     /**
      * Constant value for the News loader ID.
